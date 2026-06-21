@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+:root,
+[data-theme="dark"] {
+  --pui-bg: #050807;
+  --pui-fg: #e8fff4;
+  --pui-fg-dim: #86a394;
+  --pui-border: rgba(52, 211, 153, 0.18);
+  --pui-border-bright: rgba(52, 211, 153, 0.36);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--pui-bg, #050807);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--pui-bg, #050807);
+  color: var(--pui-fg, #f4f4f6);
+  font-family: var(--pui-font-sans, 'Inter', system-ui, sans-serif);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(52, 211, 153, 0.28);
+  color: #fff;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--pui-bg, #08080b);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pui-border, #1f1f2b);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pui-border-bright, #2a2a3a);
+}
+
+
