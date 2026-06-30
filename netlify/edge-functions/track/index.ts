@@ -1,10 +1,10 @@
-﻿import { connectLambda, getStore } from '@netlify/blobs'
+﻿export const config = {
+  path: ["/api/track"]
+}
 
-export const handler = async (event) => {
-  connectLambda(event)
-  
-  const headers = event.headers
-  const body = event.body ? JSON.parse(event.body) : {}
+export default async (request: Request, context: { blobs: any }) => {
+  const headers = Object.fromEntries(request.headers.entries())
+  const body = request.method === 'POST' ? await request.json().catch(() => ({})) : {}
 
   const visit = {
     ip: headers['x-nf-client-connection-ip'] || headers['x-forwarded-for'] || 'unknown',
@@ -18,7 +18,7 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore('portfolio-visitors')
+    const store = await context.blobs.getStore('portfolio-visitors')
     const existing = await store.get('visits', { type: 'json' }) || []
     existing.push(visit)
     if (existing.length > 500) existing.splice(0, existing.length - 500)
@@ -27,12 +27,11 @@ export const handler = async (event) => {
     console.error('track error:', err)
   }
 
-  return {
-    statusCode: 200,
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ok: true }),
-  }
+  })
 }
