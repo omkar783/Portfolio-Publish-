@@ -1,8 +1,4 @@
-﻿export const config = {
-  path: ["/api/visitors"]
-}
-
-export default async (request, context) => {
+﻿export default async (request, context) => {
   const url = new URL(request.url)
   const key = url.searchParams.get('key')
   const ADMIN_KEY = Deno.env.get('ADMIN_KEY') || 'dev-admin-123'
@@ -28,3 +24,5 @@ export default async (request, context) => {
     })
   }
 }
+
+export const config = { path: "/visitors" };
