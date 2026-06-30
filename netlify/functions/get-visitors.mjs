@@ -14,17 +14,15 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore({ name: 'portfolio-visitors', consistency: 'strong' })
-    const existing = await store.get('visits', { type: 'json' })
-    const visits = existing || []
+    const store = getStore('portfolio-visitors')
+    const existing = await store.get('visits', { type: 'json' }) || []
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Content-Control-Allow-Headers': 'Content-Type',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(visits.reverse()),
+      body: JSON.stringify(existing.reverse()),
     }
   } catch (err) {
     return {
