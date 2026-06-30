@@ -14,11 +14,20 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore({
-      name: 'portfolio-visitors',
-      siteID: process.env.NETLIFY_SITE_ID || process.env.SITE_ID,
-      token: process.env.NETLIFY_AUTH_TOKEN || process.env.DEPLOY_TOKEN
-    })
+    // For Lambda compatibility mode, use event.blobs if available
+    let store
+    if (event.blobs) {
+      const rawData = Buffer.from(event.blobs, 'base64')
+      const data = JSON.parse(rawData.toString('ascii'))
+      store = getStore({
+        edgeURL: data.url,
+        name: 'portfolio-visitors',
+        token: data.token,
+        siteID: data.siteID,
+      })
+    } else {
+      store = getStore('portfolio-visitors')
+    }
     const existing = await store.get('visits', { type: 'json' }) || []
     return {
       statusCode: 200,
@@ -32,7 +41,7 @@ export const handler = async (event) => {
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: err.message, siteID: process.env.NETLIFY_SITE_ID ? 'set' : 'missing' }),
+      body: JSON.stringify({ error: err.message }),
     }
   }
 }
