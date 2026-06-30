@@ -14,7 +14,8 @@ export const handler = async (event) => {
   }
 
   try {
-    // Try without connectLambda first
+    // First, list stores to see if blob context works
+    const stores = await getStore().list?.() || 'no list method'
     const store = getStore('portfolio-visitors')
     const existing = await store.get('visits', { type: 'json' }) || []
     return {
@@ -23,13 +24,13 @@ export const handler = async (event) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(existing.reverse()),
+      body: JSON.stringify({ stores, visits: existing.reverse() }),
     }
   } catch (err) {
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: err.message, stack: err.stack }),
+      body: JSON.stringify({ error: err.message, stack: String(err.stack).slice(0, 500) }),
     }
   }
 }
