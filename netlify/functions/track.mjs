@@ -1,4 +1,4 @@
-import { getStore } from '@netlify/blobs'
+﻿import { getStore } from '@netlify/blobs'
 
 export const handler = async (event) => {
   const headers = event.headers
@@ -16,7 +16,11 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore('portfolio-visitors')
+    const store = getStore({
+      name: 'portfolio-visitors',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_AUTH_TOKEN
+    })
     const existing = await store.get('visits', { type: 'json' }) || []
     existing.push(visit)
     if (existing.length > 500) existing.splice(0, existing.length - 500)

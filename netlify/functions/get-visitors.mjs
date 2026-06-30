@@ -1,4 +1,4 @@
-import { getStore } from '@netlify/blobs'
+﻿import { getStore } from '@netlify/blobs'
 
 const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-admin-123'
 
@@ -14,7 +14,11 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore('portfolio-visitors')
+    const store = getStore({
+      name: 'portfolio-visitors',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_AUTH_TOKEN
+    })
     const visits = await store.get('visits', { type: 'json' }) || []
     return {
       statusCode: 200,
