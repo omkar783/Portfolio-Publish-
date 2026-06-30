@@ -1,4 +1,4 @@
-[build]
+﻿[build]
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
@@ -6,11 +6,12 @@
 [build.environment]
   NODE_VERSION = "20"
 
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[dev]
-  command = "npm run dev:full"
