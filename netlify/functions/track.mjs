@@ -16,8 +16,8 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore('portfolio-visitors')
-    const existing = await store.get('visits', { type: 'json', consistency: 'strong' }) || []
+    const store = getStore({ name: 'portfolio-visitors', consistency: 'strong' })
+    const existing = await store.get('visits', { type: 'json' }) || []
     existing.push(visit)
     if (existing.length > 500) existing.splice(0, existing.length - 500)
     await store.set('visits', existing)
