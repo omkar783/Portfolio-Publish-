@@ -2,7 +2,7 @@
 
 const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-admin-123'
 
-export const handler = async (event) => {
+export const handler = async (event, context) => {
   const params = event.queryStringParameters || {}
 
   if (params.key !== ADMIN_KEY) {
@@ -14,11 +14,7 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore({
-      name: 'portfolio-visitors',
-      siteID: process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_AUTH_TOKEN
-    })
+    const store = getStore({ name: 'portfolio-visitors', ...context })
     const visits = await store.get('visits', { type: 'json' }) || []
     return {
       statusCode: 200,
