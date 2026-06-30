@@ -1,4 +1,4 @@
-﻿import { getStore } from '@netlify/blobs'
+﻿import { getStore, connectLambda } from '@netlify/blobs'
 
 const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-admin-123'
 
@@ -14,8 +14,9 @@ export const handler = async (event) => {
   }
 
   try {
-    const store = getStore('portfolio-visitors')
-    const visits = await store.get('visits', { type: 'json' }) || []
+    const store = connectLambda(getStore)('portfolio-visitors')
+    const existing = await store.get('visits', { type: 'json', consistency: 'strong' })
+    const visits = existing || []
     return {
       statusCode: 200,
       headers: {
