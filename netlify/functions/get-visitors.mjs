@@ -13,10 +13,18 @@ export const handler = async (event) => {
     }
   }
 
+  let errorStep = ''
+  
   try {
+    errorStep = 'connectLambda'
     connectLambda(event)
+    
+    errorStep = 'getStore'
     const store = getStore('portfolio-visitors')
+    
+    errorStep = 'store.get'
     const existing = await store.get('visits', { type: 'json' }) || []
+    
     return {
       statusCode: 200,
       headers: {
@@ -29,7 +37,7 @@ export const handler = async (event) => {
     return {
       statusCode: 500,
       headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: err.message }),
+      body: JSON.stringify({ error: err.message, step: errorStep, stack: String(err.stack).slice(0, 300) }),
     }
   }
 }
