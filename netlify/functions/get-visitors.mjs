@@ -1,4 +1,4 @@
-﻿import { connectLambda, getStore, setEnvironmentContext } from '@netlify/blobs'
+﻿import { connectLambda, getStore } from '@netlify/blobs'
 
 const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-admin-123'
 
@@ -14,17 +14,7 @@ export const handler = async (event) => {
   }
 
   try {
-    connectLambda(event)
-    
-    // Check if we have blob context in environment
-    const env = process.env.NETLIFY_BLOBS_CONTEXT
-    if (env) {
-      try {
-        const ctx = JSON.parse(Buffer.from(env, 'base64').toString())
-        setEnvironmentContext(ctx)
-      } catch (e) {}
-    }
-    
+    // Try without connectLambda first
     const store = getStore('portfolio-visitors')
     const existing = await store.get('visits', { type: 'json' }) || []
     return {
