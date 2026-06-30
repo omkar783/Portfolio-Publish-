@@ -1,18 +1,6 @@
 ﻿import { connectLambda, getStore } from '@netlify/blobs'
 
-const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-admin-123'
-
 export const handler = async (event) => {
-  const params = event.queryStringParameters || {}
-
-  if (params.key !== ADMIN_KEY) {
-    return {
-      statusCode: 403,
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'forbidden' }),
-    }
-  }
-
   const debug = {
     hasBlobs: !!event.blobs,
     envKeys: Object.keys(process.env).filter(k => k.includes('NETLIFY') || k.includes('BLOB')),
