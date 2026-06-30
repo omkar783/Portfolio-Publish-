@@ -5,4 +5,5 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# Edge functions have inline config, no need for declarations here
+[functions]
+  directory = "netlify/edge-functions"
