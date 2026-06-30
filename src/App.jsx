@@ -122,6 +122,36 @@ function App() {
   const activeSection = useActiveSection()
   useScrollReveal()
 
+  const [adminOpen, setAdminOpen] = useState(false)
+  const [adminStep, setAdminStep] = useState('prompt')
+  const [adminKey, setAdminKey] = useState('')
+  const [adminData, setAdminData] = useState([])
+  const [adminError, setAdminError] = useState('')
+
+  useEffect(() => {
+    fetch('/.netlify/functions/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: window.location.pathname }),
+    }).catch(() => {})
+  }, [])
+
+  async function handleAdminSubmit(e) {
+    e.preventDefault()
+    setAdminStep('loading')
+    setAdminError('')
+    try {
+      const res = await fetch(`/.netlify/functions/get-visitors?key=${encodeURIComponent(adminKey)}`)
+      if (!res.ok) { setAdminStep('prompt'); setAdminError('Wrong key'); return }
+      const data = await res.json()
+      setAdminData(data)
+      setAdminStep('data')
+    } catch {
+      setAdminStep('prompt')
+      setAdminError('Failed to load')
+    }
+  }
+
   const { hero, about, skills, experience, projects, education, certifications, contact, stats } = data
 
   return (
@@ -318,9 +348,59 @@ function App() {
           <p>© {new Date().getFullYear()} {hero.name}. Built with React.</p>
           <div className="footer-links">
             <a href={hero.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <span className="admin-badge" onClick={() => { setAdminOpen(true); setAdminStep('prompt'); setAdminKey(''); setAdminError('') }} title="Visitor log">admin ●</span>
           </div>
         </div>
       </footer>
+
+      {adminOpen && (
+        <div className="admin-overlay" onClick={() => setAdminOpen(false)}>
+          <div className="admin-panel" onClick={e => e.stopPropagation()}>
+            <button className="admin-close" onClick={() => setAdminOpen(false)}>×</button>
+            {adminStep === 'prompt' && (
+              <div className="admin-prompt">
+                <h2>Visitor Log</h2>
+                <p className="admin-hint">Enter admin key to view visitor data</p>
+                <form onSubmit={handleAdminSubmit}>
+                  <input type="password" className="admin-input" value={adminKey} onChange={e => setAdminKey(e.target.value)} placeholder="Admin key" autoFocus />
+                  {adminError && <p className="admin-error">{adminError}</p>}
+                  <button type="submit" className="admin-unlock">Unlock</button>
+                </form>
+              </div>
+            )}
+            {adminStep === 'loading' && <p className="admin-loading">Loading visitor data...</p>}
+            {adminStep === 'data' && (
+              <div className="admin-data">
+                <h2>Visitor Log ({adminData.length})</h2>
+                <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th>IP</th>
+                        <th>Location</th>
+                        <th>Browser</th>
+                        <th>Page</th>
+                        <th>Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {adminData.map((v, i) => (
+                        <tr key={i}>
+                          <td className="admin-cell-ip">{v.ip}</td>
+                          <td>{[v.city, v.region, v.country].filter(Boolean).join(', ') || '—'}</td>
+                          <td className="admin-cell-ua">{v.userAgent}</td>
+                          <td>{v.url}</td>
+                          <td>{new Date(v.timestamp).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
     </div>
   );
