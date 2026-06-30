@@ -2,7 +2,7 @@
 
 const ADMIN_KEY = process.env.ADMIN_KEY || 'dev-admin-123'
 
-export const handler = async (event, context) => {
+export const handler = async (event) => {
   const params = event.queryStringParameters || {}
 
   if (params.key !== ADMIN_KEY) {
@@ -14,7 +14,7 @@ export const handler = async (event, context) => {
   }
 
   try {
-    const store = getStore({ name: 'portfolio-visitors', ...context })
+    const store = getStore('portfolio-visitors')
     const visits = await store.get('visits', { type: 'json' }) || []
     return {
       statusCode: 200,
