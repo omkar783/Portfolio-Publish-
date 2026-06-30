@@ -93,21 +93,25 @@ function Nav({ activeSection, menuOpen, setMenuOpen }) {
   ]
   return (
     <nav className="nav">
-      <span className="nav-brand">Omkar Murkute</span>
-      <button className={`hamburger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
-        <span /><span /><span />
-      </button>
-      <div className={`nav-links${menuOpen ? ' open' : ''}`}>
-        {links.map(link => (
-          <a
-            key={link.id}
-            href={`#${link.id}`}
-            className={`nav-link${activeSection === link.id ? ' active' : ''}`}
-            onClick={() => setMenuOpen(false)}
-          >
-            {link.label}
-          </a>
-        ))}
+      <div className="nav-inner">
+        <span className="nav-brand">Omkar Murkute</span>
+        <div className="nav-actions">
+          <div className={`nav-links${menuOpen ? ' open' : ''}`}>
+            {links.map(link => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                className={`nav-link${activeSection === link.id ? ' active' : ''}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+          <button className={`hamburger${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
+            <span /><span /><span />
+          </button>
+        </div>
       </div>
     </nav>
   )
@@ -175,120 +179,134 @@ function App() {
       </section>
 
       <section className="section section-about" id="about" data-reveal>
-        <TermCmd cmd="about.md" />
-        <GradientText as="h2" className="section-title">About</GradientText>
-        <div className="about-content">
-          {about.map((p, i) => <p key={i}>{p}</p>)}
+        <div className="section-container">
+          <TermCmd cmd="about.md" />
+          <GradientText as="h2" className="section-title">About</GradientText>
+          <div className="about-content">
+            {about.map((p, i) => <p key={i}>{p}</p>)}
+          </div>
         </div>
       </section>
 
       <section className="section section-skills" id="skills">
-        <TermCmd cmd="skills.json" delay={0.1} />
-        <GradientText as="h2" className="section-title" data-reveal>Skills</GradientText>
-        <div className="skills-grid">
-          {skills.map((g, i) => (
-            <div key={g.category} data-reveal style={{ transitionDelay: `${i * 0.06}s` }}>
-              <GlassCard glowOnHover>
-                <GlassCard.Title>{g.category}</GlassCard.Title>
-                <GlassCard.Body>
-                  <div className="skill-tags">
-                    {g.items.map((item) => <span className="skill-tag" key={item}>{item}</span>)}
-                  </div>
-                </GlassCard.Body>
-              </GlassCard>
-            </div>
-          ))}
+        <div className="section-container">
+          <TermCmd cmd="skills.json" delay={0.1} />
+          <GradientText as="h2" className="section-title" data-reveal>Skills</GradientText>
+          <div className="skills-grid">
+            {skills.map((g, i) => (
+              <div key={g.category} data-reveal style={{ transitionDelay: `${i * 0.06}s` }}>
+                <GlassCard glowOnHover>
+                  <GlassCard.Title>{g.category}</GlassCard.Title>
+                  <GlassCard.Body>
+                    <div className="skill-tags">
+                      {g.items.map((item) => <span className="skill-tag" key={item}>{item}</span>)}
+                    </div>
+                  </GlassCard.Body>
+                </GlassCard>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="section section-experience" id="experience">
-        <TermCmd cmd="experience.log" delay={0.2} />
-        <GradientText as="h2" className="section-title" data-reveal>Experience</GradientText>
-        <div className="timeline">
-          {experience.map((job, i) => (
-            <div className="timeline-item" key={job.role + job.company} data-reveal style={{ transitionDelay: `${i * 0.1}s` }}>
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <p className="timeline-period">{job.period}</p>
-                <h3>{job.role}</h3>
-                <p className="timeline-company">{job.company}</p>
-                <ul>
-                  {job.points.map((pt) => <li key={pt}>{pt}</li>)}
-                </ul>
+        <div className="section-container">
+          <TermCmd cmd="experience.log" delay={0.2} />
+          <GradientText as="h2" className="section-title" data-reveal>Experience</GradientText>
+          <div className="timeline">
+            {experience.map((job, i) => (
+              <div className="timeline-item" key={job.role + job.company} data-reveal style={{ transitionDelay: `${i * 0.1}s` }}>
+                <div className="timeline-dot" />
+                <div className="timeline-content">
+                  <p className="timeline-period">{job.period}</p>
+                  <h3>{job.role}</h3>
+                  <p className="timeline-company">{job.company}</p>
+                  <ul>
+                    {job.points.map((pt) => <li key={pt}>{pt}</li>)}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="section section-projects" id="projects">
-        <TermCmd cmd="projects/" delay={0.3} />
-        <GradientText as="h2" className="section-title" data-reveal>Projects</GradientText>
-        <div className="projects-grid">
-          {projects.map((p, i) => (
-            <div key={p.name} data-reveal style={{ transitionDelay: `${i * 0.08}s` }}>
-              <GlassCard glowOnHover>
-                <GlassCard.Title>{p.name}</GlassCard.Title>
-                <GlassCard.Body>
-                  {p.desc}
-                  <div className="project-tags">
-                    {p.tags.map((t) => <span className="project-tag" key={t}>{t}</span>)}
-                  </div>
-                </GlassCard.Body>
-              </GlassCard>
-            </div>
-          ))}
+        <div className="section-container">
+          <TermCmd cmd="projects/" delay={0.3} />
+          <GradientText as="h2" className="section-title" data-reveal>Projects</GradientText>
+          <div className="projects-grid">
+            {projects.map((p, i) => (
+              <div key={p.name} data-reveal style={{ transitionDelay: `${i * 0.08}s` }}>
+                <GlassCard glowOnHover>
+                  <GlassCard.Title>{p.name}</GlassCard.Title>
+                  <GlassCard.Body>
+                    {p.desc}
+                    <div className="project-tags">
+                      {p.tags.map((t) => <span className="project-tag" key={t}>{t}</span>)}
+                    </div>
+                  </GlassCard.Body>
+                </GlassCard>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="section section-education" id="education">
-        <TermCmd cmd="education.md" delay={0.4} />
-        <GradientText as="h2" className="section-title" data-reveal>Education</GradientText>
-        <div className="info-grid">
-          {education.map((item, i) => (
-            <div key={item.title} data-reveal style={{ transitionDelay: `${i * 0.08}s` }}>
-              <GlassCard>
-                <GlassCard.Title>{item.title}</GlassCard.Title>
-                <GlassCard.Body>{item.desc}</GlassCard.Body>
-              </GlassCard>
-            </div>
-          ))}
+        <div className="section-container">
+          <TermCmd cmd="education.md" delay={0.4} />
+          <GradientText as="h2" className="section-title" data-reveal>Education</GradientText>
+          <div className="info-grid">
+            {education.map((item, i) => (
+              <div key={item.title} data-reveal style={{ transitionDelay: `${i * 0.08}s` }}>
+                <GlassCard>
+                  <GlassCard.Title>{item.title}</GlassCard.Title>
+                  <GlassCard.Body>{item.desc}</GlassCard.Body>
+                </GlassCard>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {certifications && certifications.length > 0 && (
         <section className="section section-certifications" id="certifications">
-          <TermCmd cmd="certifications.asc" delay={0.5} />
-          <GradientText as="h2" className="section-title" data-reveal>Certifications</GradientText>
-          <div className="cert-list" data-reveal>
-            {certifications.map((c, i) => (
-              <div className="cert-item" key={c} data-reveal style={{ transitionDelay: `${i * 0.05}s` }}>
-                <span className="cert-bullet">&#9656;</span> {c}
-              </div>
-            ))}
+          <div className="section-container">
+            <TermCmd cmd="certifications.asc" delay={0.5} />
+            <GradientText as="h2" className="section-title" data-reveal>Certifications</GradientText>
+            <div className="cert-list" data-reveal>
+              {certifications.map((c, i) => (
+                <div className="cert-item" key={c} data-reveal style={{ transitionDelay: `${i * 0.05}s` }}>
+                  <span className="cert-bullet">&#9656;</span> {c}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
 
       <section className="section section-contact" id="contact">
-        <TermCmd cmd="contact.ini" delay={0.6} />
-        <GradientText as="h2" className="section-title" data-reveal>Contact</GradientText>
-        <div className="contact-content" data-reveal>
-          <p className="contact-intro">Let's work together on your next infrastructure project.</p>
-          <div className="contact-grid">
-            {contact.map((item) => (
-              <GlassCard key={item.title} glowOnHover>
-                <GlassCard.Title>{item.title}</GlassCard.Title>
-                <GlassCard.Body>
-                  {item.link ? <a href={item.link} className="contact-link">{item.value}</a> : item.value}
-                </GlassCard.Body>
-              </GlassCard>
-            ))}
-          </div>
-          <div className="contact-cta">
-            <Button as="a" href={`mailto:${hero.email}?subject=Let's%20work%20together`} variant="glow" size="lg" sparkle>
-              Start a Conversation
-            </Button>
+        <div className="section-container">
+          <TermCmd cmd="contact.ini" delay={0.6} />
+          <GradientText as="h2" className="section-title" data-reveal>Contact</GradientText>
+          <div className="contact-content" data-reveal>
+            <p className="contact-intro">Let's work together on your next infrastructure project.</p>
+            <div className="contact-grid">
+              {contact.map((item) => (
+                <GlassCard key={item.title} glowOnHover>
+                  <GlassCard.Title>{item.title}</GlassCard.Title>
+                  <GlassCard.Body>
+                    {item.link ? <a href={item.link} className="contact-link">{item.value}</a> : item.value}
+                  </GlassCard.Body>
+                </GlassCard>
+              ))}
+            </div>
+            <div className="contact-cta">
+              <Button as="a" href={`mailto:${hero.email}?subject=Let's%20work%20together`} variant="glow" size="lg" sparkle>
+                Start a Conversation
+              </Button>
+            </div>
           </div>
         </div>
       </section>
