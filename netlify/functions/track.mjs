@@ -2,7 +2,7 @@
 
 export const handler = async (event) => {
   connectLambda(event)
-  
+
   const headers = event.headers
   const body = event.body ? JSON.parse(event.body) : {}
 
