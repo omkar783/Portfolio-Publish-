@@ -7,8 +7,12 @@ export const handler = async (event) => {
     const existing = await store.get('visits', { type: 'json' }) || []
     return {
       statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      body: JSON.stringify(existing.reverse()),
+      headers: { 
+        'Access-Control-Allow-Origin': '*', 
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      },
+      body: JSON.stringify({ visits: existing.reverse(), count: existing.length }),
     }
   } catch (err) {
     return {
