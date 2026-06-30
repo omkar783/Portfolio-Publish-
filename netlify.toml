@@ -1,6 +1,7 @@
 ﻿[build]
   command = "npm run build"
   publish = "dist"
+  edge_functions = "netlify/edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -14,6 +15,3 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[functions]
-  directory = "netlify/functions"
