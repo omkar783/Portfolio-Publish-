@@ -1,6 +1,14 @@
-﻿[build]
+[build]
   command = "npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
+
+[[edge_functions]]
+  function = "visitors"
+  path = "/visitors"
+
+[[edge_functions]]
+  function = "track"
+  path = "/track"

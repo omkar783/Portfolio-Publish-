@@ -129,7 +129,7 @@ function App() {
   const [adminError, setAdminError] = useState('')
 
   useEffect(() => {
-    fetch('/.netlify/functions/track', {
+    fetch('/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url: window.location.pathname }),
@@ -141,7 +141,7 @@ function App() {
     setAdminStep('loading')
     setAdminError('')
     try {
-      const res = await fetch(`/.netlify/functions/get-visitors?key=${encodeURIComponent(adminKey)}`)
+      const res = await fetch(`/visitors?key=${encodeURIComponent(adminKey)}`)
       if (!res.ok) { setAdminStep('prompt'); setAdminError('Wrong key'); return }
       const data = await res.json()
       setAdminData(data)
