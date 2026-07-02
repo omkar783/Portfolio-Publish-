@@ -229,7 +229,6 @@ pdf.section_heading("Certifications")
 
 certs = [
     "Microsoft Certified: Azure Fundamentals (AZ-900) \u2014 Microsoft | Feb 2024",
-    "DevOps Internship Certificate \u2014 Noesis Tech | Dec 2025 \u2013 May 2026",
     "Diploma in Java Development Training (A+ Grade) \u2014 VibrantMinds Technologies | Jul \u2013 Dec 2025",
     "Anthropic Academy \u2014 Claude with the Anthropic API, Building with the Claude API, Claude Code in Action, Introduction to Model Context Protocol | Jun 2026",
     "Java Assessment Certificate \u2014 CareerNinja.io (LearnTube)",

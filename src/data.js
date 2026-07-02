@@ -52,7 +52,6 @@ const data = {
   ],
   certifications: [
     "Microsoft Certified: Azure Fundamentals (AZ-900) — Microsoft | Feb 2024",
-    "DevOps Internship Certificate — Noesis Tech | Dec 2025 – May 2026",
     "Diploma in Java Development Training (A+ Grade) — VibrantMinds Technologies | Jul – Dec 2025",
     "Anthropic Academy — Claude with the Anthropic API, Building with the Claude API, Claude Code in Action, Introduction to Model Context Protocol | Jun 2026",
     "Java Assessment Certificate — CareerNinja.io (LearnTube)",

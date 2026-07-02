@@ -25,3 +25,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel
+.env*
+*.zip
+deno.lock
+visits.json
+blob-data.json
