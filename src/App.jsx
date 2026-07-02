@@ -8,6 +8,20 @@ import './App.css'
 
 import data from './data'
 
+function getColorClass(category) {
+  switch (category) {
+    case 'Cloud & Infrastructure': return 'skill-tag-blue'
+    case 'Containers & Kubernetes': return 'skill-tag-teal'
+    case 'CI/CD & Version Control': return 'skill-tag-purple'
+    case 'Infrastructure as Code': return 'skill-tag-orange'
+    case 'Web Servers & Stacks': return 'skill-tag-green'
+    case 'Monitoring & Security': return 'skill-tag-pink'
+    case 'Databases & Caching': return 'skill-tag-yellow'
+    case 'AI & LLM Tooling': return 'skill-tag-indigo'
+    default: return ''
+  }
+}
+
 
 
 function useScrollReveal() {
@@ -256,6 +270,9 @@ function App() {
 
   const [adminError, setAdminError] = useState('')
 
+  const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' })
+  const [contactStatus, setContactStatus] = useState('idle')
+
 
 
   useEffect(() => {
@@ -271,6 +288,17 @@ function App() {
     }).catch(() => {})
 
   }, [])
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && adminOpen) {
+        setAdminOpen(false)
+        setAdminStep('prompt')
+      }
+    }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [adminOpen])
 
 
 
@@ -302,6 +330,26 @@ function App() {
 
     }
 
+  }
+
+  async function handleContactSubmit(e) {
+    e.preventDefault()
+    setContactStatus('submitting')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(contactForm)
+      })
+      if (res.ok) {
+        setContactStatus('success')
+        setContactForm({ name: '', email: '', message: '' })
+      } else {
+        setContactStatus('error')
+      }
+    } catch {
+      setContactStatus('error')
+    }
   }
 
 
@@ -459,7 +507,7 @@ function App() {
 
                     <div className="skill-tags">
 
-                      {g.items.map((item) => <span className="skill-tag" key={item}>{item}</span>)}
+                      {g.items.map((item) => <span className={`skill-tag ${getColorClass(g.category)}`} key={item}>{item}</span>)}
 
                     </div>
 
@@ -667,12 +715,38 @@ function App() {
 
             <div className="contact-cta">
 
-              <Button as="a" href={`mailto:${hero.email}?subject=Let's%20work%20together`} variant="glow" size="lg" sparkle>
-
-                Start a Conversation
-
-              </Button>
-
+              <form className="contact-form" onSubmit={handleContactSubmit}>
+                <div className="contact-form-fields">
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={contactForm.name}
+                    onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
+                    required
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={contactForm.email}
+                    onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
+                    required
+                  />
+                </div>
+                <textarea
+                  placeholder="Message"
+                  value={contactForm.message}
+                  onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
+                  rows={4}
+                  required
+                />
+                <div className="contact-form-actions">
+                  <Button type="submit" variant="glow" size="lg" disabled={contactStatus === 'submitting'}>
+                    {contactStatus === 'submitting' ? 'Sending...' : 'Send Message'}
+                  </Button>
+                  {contactStatus === 'success' && <span className="contact-success">Sent!</span>}
+                  {contactStatus === 'error' && <span className="contact-error">Try again</span>}
+                </div>
+              </form>
             </div>
 
           </div>
